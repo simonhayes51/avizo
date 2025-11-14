@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
-from passlib.hash import bcrypt
+import bcrypt
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 import os
@@ -52,13 +52,16 @@ def login(data: schemas.UserLogin, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.email == data.email).first()
     if not user:
         # create user on first login (MVP)
-        hashed = bcrypt.hash(data.password)
-        user = models.User(email=data.email, hashed_password=hashed)
+        password_bytes = data.password.encode('utf-8')
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(password_bytes, salt)
+        user = models.User(email=data.email, hashed_password=hashed.decode('utf-8'))
         db.add(user)
         db.commit()
         db.refresh(user)
     else:
-        if not bcrypt.verify(data.password, user.hashed_password):
+        password_bytes = data.password.encode('utf-8')
+        if not bcrypt.checkpw(password_bytes, user.hashed_password.encode('utf-8')):
             raise HTTPException(status_code=400, detail="Incorrect password")
 
     access_token = create_access_token(data={"sub": user.id})
