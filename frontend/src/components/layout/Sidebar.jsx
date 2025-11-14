@@ -1,5 +1,5 @@
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const links = [
   { to: '/app', label: 'Dashboard' },
@@ -10,6 +10,15 @@ const links = [
 ];
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+  const userEmail = localStorage.getItem('avizo_email');
+
+  function handleLogout() {
+    localStorage.removeItem('avizo_token');
+    localStorage.removeItem('avizo_email');
+    navigate('/login');
+  }
+
   return (
     <aside className="glass-panel h-full w-60 flex-col justify-between bg-slate-950/80 px-4 py-5 hidden md:flex">
       <div className="space-y-6">
@@ -42,15 +51,18 @@ export default function Sidebar() {
           ))}
         </nav>
       </div>
-      <div className="rounded-xl bg-slate-900/80 px-3 py-3 text-[11px] text-slate-400">
-        <div className="font-semibold text-slate-200 mb-1">Usage</div>
-        <div className="flex items-center justify-between mb-1">
-          <span>Messages this month</span>
-          <span className="text-slate-100 font-medium">348</span>
+
+      <div className="space-y-2">
+        <div className="rounded-xl bg-slate-900/80 px-3 py-2.5 text-[11px]">
+          <div className="text-slate-400 mb-0.5">Signed in as</div>
+          <div className="text-slate-200 font-medium truncate">{userEmail}</div>
         </div>
-        <div className="h-1.5 rounded-full bg-slate-800 overflow-hidden">
-          <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-brand-400 to-emerald-400" />
-        </div>
+        <button
+          onClick={handleLogout}
+          className="w-full text-xs px-3 py-2 rounded-xl bg-slate-800/50 text-slate-300 hover:bg-slate-800 transition"
+        >
+          Sign out
+        </button>
       </div>
     </aside>
   );
