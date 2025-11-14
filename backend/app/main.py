@@ -31,3 +31,13 @@ app.include_router(inbox.router, prefix="/api")
 @app.get("/")
 def root():
     return {"status": "ok", "service": "avizo-backend"}
+
+@app.get("/health")
+def health():
+    """Health check endpoint with configuration info"""
+    return {
+        "status": "healthy",
+        "allowed_origins": os.getenv("ALLOWED_ORIGINS", "http://localhost:5173"),
+        "database_configured": bool(os.getenv("DATABASE_URL")),
+        "jwt_configured": bool(os.getenv("JWT_SECRET_KEY"))
+    }
