@@ -20,8 +20,9 @@ export default function Login() {
       localStorage.setItem('avizo_email', res.email);
       navigate('/app');
     } catch (err) {
-      console.error(err);
-      setError('Could not log in. Check details or try again.');
+      console.error('Login error:', err);
+      const errorMsg = err.message || 'Could not log in. Check details or try again.';
+      setError(errorMsg);
     }
   }
 
