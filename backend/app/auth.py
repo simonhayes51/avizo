@@ -36,9 +36,10 @@ def get_current_user(
     try:
         token = credentials.credentials
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id = payload.get("sub")
-        if user_id is None:
+        user_id_str = payload.get("sub")
+        if user_id_str is None:
             raise credentials_exception
+        user_id = int(user_id_str)
     except JWTError as e:
         print(f"JWT Error: {e}")
         raise credentials_exception
@@ -69,5 +70,5 @@ def login(data: schemas.UserLogin, db: Session = Depends(get_db)):
         if not bcrypt.checkpw(password_bytes, user.hashed_password.encode('utf-8')):
             raise HTTPException(status_code=400, detail="Incorrect password")
 
-    access_token = create_access_token(data={"sub": user.id})
+    access_token = create_access_token(data={"sub": str(user.id)})
     return {"token": access_token, "email": user.email}
