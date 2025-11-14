@@ -1,6 +1,8 @@
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
+console.log('[API] Using API URL:', API_URL);
+
 async function request(path, options = {}) {
   const token = localStorage.getItem('avizo_token');
   const headers = {
@@ -11,6 +13,9 @@ async function request(path, options = {}) {
   // Add Authorization header if token exists
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
+    console.log('[API] Request to', path, 'with token:', token.substring(0, 20) + '...');
+  } else {
+    console.log('[API] Request to', path, 'without token');
   }
 
   const res = await fetch(`${API_URL}${path}`, {
@@ -18,9 +23,12 @@ async function request(path, options = {}) {
     ...options,
   });
 
+  console.log('[API] Response from', path, ':', res.status);
+
   if (!res.ok) {
     // Handle 401 Unauthorized - redirect to login
     if (res.status === 401) {
+      console.error('[API] 401 Unauthorized - clearing token and redirecting');
       localStorage.removeItem('avizo_token');
       localStorage.removeItem('avizo_email');
       window.location.href = '/login';
