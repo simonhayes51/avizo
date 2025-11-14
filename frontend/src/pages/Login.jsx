@@ -28,9 +28,9 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4">
       <div className="glass-panel max-w-sm w-full p-6 bg-slate-950/80">
-        <h1 className="text-lg font-semibold mb-1 text-slate-50">Sign in to Avizo</h1>
+        <h1 className="text-lg font-semibold mb-1 text-slate-50">Welcome to Avizo</h1>
         <p className="text-xs text-slate-400 mb-4">
-          Enter your credentials to access your account
+          Sign in or create a new account by entering your email and password
         </p>
         <form onSubmit={handleSubmit} className="space-y-3 text-xs">
           <Input
