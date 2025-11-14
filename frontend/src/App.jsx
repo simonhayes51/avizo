@@ -1,6 +1,5 @@
 
-import { Routes, Route } from 'react-router-dom';
-import ComingSoon from './pages/ComingSoon.jsx';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login.jsx';
 import MainShell from './components/layout/MainShell.jsx';
 import Dashboard from './pages/app/Dashboard.jsx';
@@ -12,7 +11,7 @@ import Pricing from './pages/app/Pricing.jsx';
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<ComingSoon />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<Login />} />
       <Route path="/app" element={<MainShell />}>
         <Route index element={<Dashboard />} />
