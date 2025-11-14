@@ -96,17 +96,11 @@ export default function Inbox() {
                   {activeThread.customer_name || `Customer #${activeThread.customer_id}`}
                 </div>
                 <div className="text-[11px] text-slate-400">
-                  Demo conversation via the API
+                  Thread #{activeThread.id}
                 </div>
               </div>
-              <Button variant="ghost" className="text-xs px-3 py-1.5">
-                Open customer
-              </Button>
             </div>
             <div className="flex-1 rounded-xl bg-slate-950/60 border border-slate-800/80 p-3 space-y-3 text-xs overflow-y-auto max-h-80">
-              <div className="text-slate-400 text-[11px] text-center mb-1">
-                Messages below are stored in the database.
-              </div>
               <div className="space-y-2">
                 {messages.map((m) => (
                   <div

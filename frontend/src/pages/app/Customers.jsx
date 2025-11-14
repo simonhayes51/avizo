@@ -53,7 +53,7 @@ export default function Customers() {
         <div>
           <h2 className="text-sm font-semibold text-slate-100">Customers</h2>
           <p className="text-xs text-slate-400">
-            Stored in the real database via the API.
+            Manage your customer database
           </p>
         </div>
         <Button

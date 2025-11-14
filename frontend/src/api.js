@@ -2,14 +2,30 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 async function request(path, options = {}) {
+  const token = localStorage.getItem('avizo_token');
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),
+  };
+
+  // Add Authorization header if token exists
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${API_URL}${path}`, {
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
+    headers,
     ...options,
   });
+
   if (!res.ok) {
+    // Handle 401 Unauthorized - redirect to login
+    if (res.status === 401) {
+      localStorage.removeItem('avizo_token');
+      localStorage.removeItem('avizo_email');
+      window.location.href = '/login';
+      throw new Error('Session expired. Please login again.');
+    }
     const text = await res.text();
     throw new Error(text || `Request failed: ${res.status}`);
   }

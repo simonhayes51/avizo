@@ -3,11 +3,15 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .. import models, schemas
 from ..deps import get_db
+from ..auth import get_current_user
 
 router = APIRouter(prefix="/inbox", tags=["inbox"])
 
 @router.get("/threads")
-def list_threads(db: Session = Depends(get_db)):
+def list_threads(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
     threads = db.query(models.MessageThread).all()
     out = []
     for t in threads:
@@ -21,7 +25,11 @@ def list_threads(db: Session = Depends(get_db)):
     return out
 
 @router.get("/threads/{thread_id}")
-def get_thread(thread_id: int, db: Session = Depends(get_db)):
+def get_thread(
+    thread_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
     t = db.query(models.MessageThread).filter(models.MessageThread.id == thread_id).first()
     if not t:
         raise HTTPException(status_code=404, detail="Thread not found")
@@ -41,7 +49,12 @@ def get_thread(thread_id: int, db: Session = Depends(get_db)):
     }
 
 @router.post("/threads/{thread_id}/messages", response_model=schemas.MessageOut)
-def send_message(thread_id: int, msg: schemas.MessageBase, db: Session = Depends(get_db)):
+def send_message(
+    thread_id: int,
+    msg: schemas.MessageBase,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
     t = db.query(models.MessageThread).filter(models.MessageThread.id == thread_id).first()
     if not t:
         raise HTTPException(status_code=404, detail="Thread not found")

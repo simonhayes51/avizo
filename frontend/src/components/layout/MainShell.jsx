@@ -9,10 +9,6 @@ export default function MainShell() {
       <div className="mx-auto flex max-w-6xl gap-4 px-3 py-4 sm:px-4 sm:py-6">
         <Sidebar />
         <main className="flex-1">
-          <div className="glass-panel mb-4 hidden items-center justify-between px-4 py-2 text-xs text-slate-300 md:flex">
-            <span>Demo mode · Backed by a real API & database.</span>
-            <span className="text-slate-400">v0.1 · Avizo Preview</span>
-          </div>
           <TopBar />
           <div className="space-y-4">
             <Outlet />

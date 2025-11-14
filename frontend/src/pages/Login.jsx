@@ -30,7 +30,7 @@ export default function Login() {
       <div className="glass-panel max-w-sm w-full p-6 bg-slate-950/80">
         <h1 className="text-lg font-semibold mb-1 text-slate-50">Sign in to Avizo</h1>
         <p className="text-xs text-slate-400 mb-4">
-          This is a simple email & password login powered by the API.
+          Enter your credentials to access your account
         </p>
         <form onSubmit={handleSubmit} className="space-y-3 text-xs">
           <Input
